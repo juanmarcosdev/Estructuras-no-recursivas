@@ -8,17 +8,6 @@ import com.cyedbooks.estructuras.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-/**
- * Lista doblemente enlazada: cada nodo conoce a su predecesor y su sucesor,
- * lo que permite {@code removeLast} y recorridos hacia atrás en O(1)/O(n)
- * eficientes sin tener que recorrer desde la cabeza.
- * <p>
- * La estrategia de recorrido de {@link #nodeAt(int)} elige automáticamente
- * empezar desde la cabeza o desde la cola según cuál extremo esté más cerca
- * del índice buscado, reduciendo a la mitad el costo promedio de acceso.
- *
- * @param <T> tipo de los elementos almacenados
- */
 public class DoublyLinkedList<T> implements LinkedListInterface<T>, Drawable {
 
     private BiNode<T> head;
@@ -212,11 +201,6 @@ public class DoublyLinkedList<T> implements LinkedListInterface<T>, Drawable {
         };
     }
 
-    /**
-     * @return un iterador que recorre la lista de cola a cabeza. Útil para
-     *         algoritmos (por ejemplo, deshacer/rehacer) que necesitan
-     *         orden inverso sin costo adicional de copia.
-     */
     public Iterator<T> descendingIterator() {
         return new Iterator<>() {
             private BiNode<T> current = tail;
@@ -281,7 +265,6 @@ public class DoublyLinkedList<T> implements LinkedListInterface<T>, Drawable {
     }
 
     private BiNode<T> nodeAt(int index) {
-        // Recorre desde el extremo más cercano al índice pedido.
         if (index <= size / 2) {
             BiNode<T> current = head;
             for (int i = 0; i < index; i++) {

@@ -17,7 +17,7 @@ class PriorityQueueTest {
 
     @BeforeEach
     void setUp() {
-        pq = new PriorityQueue<>(); // min-heap por orden natural
+        pq = new PriorityQueue<>();
     }
 
     @Test

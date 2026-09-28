@@ -8,14 +8,6 @@ import com.cyedbooks.estructuras.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-/**
- * Pila respaldada por un arreglo dinámico. El tope de la pila es siempre el
- * último elemento ocupado del arreglo, lo que hace que {@code push}/{@code pop}
- * sean O(1) amortizado (el costo de redimensionar se reparte entre muchas
- * operaciones).
- *
- * @param <T> tipo de los elementos almacenados
- */
 public class ArrayStack<T> implements StackInterface<T>, Drawable {
 
     private Object[] elements;
@@ -47,7 +39,7 @@ public class ArrayStack<T> implements StackInterface<T>, Drawable {
             throw EmptyStructureException.forOperation("ArrayStack", "pop");
         }
         T value = (T) elements[size - 1];
-        elements[--size] = null; // evita fugas de memoria (referencia colgante)
+        elements[--size] = null;
         if (ArrayDynamics.needsShrink(size, elements.length)) {
             elements = ArrayDynamics.resize(elements, ArrayDynamics.shrinkCapacity(elements.length));
         }
@@ -75,7 +67,6 @@ public class ArrayStack<T> implements StackInterface<T>, Drawable {
 
     @Override
     public Object[] toArray() {
-        // Orden: tope primero, base al final (orden de desapilado).
         Object[] result = new Object[size];
         for (int i = 0; i < size; i++) {
             result[i] = elements[size - 1 - i];

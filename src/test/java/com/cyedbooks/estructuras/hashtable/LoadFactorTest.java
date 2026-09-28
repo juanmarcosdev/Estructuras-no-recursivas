@@ -34,7 +34,6 @@ class LoadFactorTest {
             table.put(i, i);
         }
         assertTrue(table.capacity() > initialCapacity);
-        // Todos los elementos deben seguir siendo accesibles tras redimensionar.
         for (int i = 0; i < 100; i++) {
             assertEquals(i, table.get(i));
         }

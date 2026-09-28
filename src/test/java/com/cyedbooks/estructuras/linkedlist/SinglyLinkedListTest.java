@@ -91,9 +91,9 @@ class SinglyLinkedListTest {
     void addAtVariousPositions() {
         list.addLast(1);
         list.addLast(3);
-        list.addAt(1, 2); // medio
-        list.addAt(0, 0); // inicio
-        list.addAt(4, 4); // fin
+        list.addAt(1, 2);
+        list.addAt(0, 0);
+        list.addAt(4, 4);
         assertEquals(List.of(0, 1, 2, 3, 4), toList());
     }
 
@@ -117,7 +117,6 @@ class SinglyLinkedListTest {
 
         assertEquals(2, list.removeFirst());
         assertTrue(list.isEmpty());
-        // La cola también debe quedar limpia: un addLast tras vaciar debe funcionar.
         list.addLast(99);
         assertEquals(99, list.peekFirst());
         assertEquals(99, list.peekLast());

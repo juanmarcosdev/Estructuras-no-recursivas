@@ -1,12 +1,5 @@
 package com.cyedbooks.estructuras.model;
 
-/**
- * Nodo genérico de doble dirección ({@code prev} / {@code next}), usado por
- * {@code DoublyLinkedList} para permitir recorrido y remoción en O(1) desde
- * ambos extremos sin necesidad de recorrer la lista.
- *
- * @param <T> tipo del valor almacenado en el nodo
- */
 public class BiNode<T> {
 
     private T data;

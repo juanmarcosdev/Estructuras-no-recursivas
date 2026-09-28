@@ -11,51 +11,19 @@ import com.cyedbooks.estructuras.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-/**
- * Tabla hash genérica con función de hashing y estrategia de resolución de
- * colisiones intercambiables (patrón Strategy), factor de carga
- * configurable y redimensionamiento automático.
- * <p>
- * Soporta dos familias de resolución de colisiones sobre el mismo arreglo
- * interno {@code Entry<K, V>[]}:
- * <ul>
- *   <li><b>Encadenamiento separado</b> ({@link ChainingStrategy}): cada
- *       slot es cabeza de una lista enlazada de entradas (usando el campo
- *       {@code next} de {@link Entry}).</li>
- *   <li><b>Direccionamiento abierto</b> ({@code LinearProbing},
- *       {@code QuadraticProbing}): cada slot almacena a lo sumo una
- *       entrada; las colisiones se resuelven sondeando índices alternativos
- *       calculados por la {@link CollisionStrategy}. Las remociones dejan
- *       una marca "tombstone" para no romper las secuencias de sondeo de
- *       entradas insertadas después.</li>
- * </ul>
- * Todas las operaciones (inserción, búsqueda, remoción, redimensionamiento)
- * están implementadas con bucles, sin recursión.
- *
- * @param <K> tipo de las claves (no puede ser {@code null})
- * @param <V> tipo de los valores (puede ser {@code null})
- */
 public class HashTable<K, V> implements HashTableInterface<K, V>, Drawable {
 
     private static final int DEFAULT_CAPACITY = 16;
     private static final double DEFAULT_CHAINING_LOAD_FACTOR = 0.75;
     private static final double DEFAULT_OPEN_ADDRESSING_LOAD_FACTOR = 0.5;
 
-    /**
-     * Centinela compartido que marca un slot cuya entrada fue removida en
-     * una tabla de direccionamiento abierto ("tombstone"). Se distingue de
-     * un slot vacío ({@code null}) para no cortar prematuramente una
-     * secuencia de sondeo.
-     */
+    //marca de borrado, si se deja null se corta la busqueda por sondeo
     @SuppressWarnings("rawtypes")
     private static final Entry TOMBSTONE = new Entry<>(null, null);
 
     private Entry<K, V>[] table;
     private int capacity;
     private int size;
-    /** Cantidad de slots ocupados por una entrada real O un tombstone
-     *  (relevante solo para direccionamiento abierto: determina cuándo
-     *  redimensionar, ya que los tombstones también degradan el sondeo). */
     private int occupiedSlots;
 
     private final HashFunction<K> hashFunction;
@@ -130,11 +98,9 @@ public class HashTable<K, V> implements HashTableInterface<K, V>, Drawable {
             Entry<K, V> slot = table[index];
             if (slot == null) {
                 if (firstTombstone != -1) {
-                    // Reutiliza el tombstone: el slot ya contaba como
-                    // "ocupado", solo cambia de tombstone a entrada real.
+                    //se reusa el primer borrado que se encontro
                     table[firstTombstone] = new Entry<>(key, value);
                 } else {
-                    // Slot nunca usado: pasa a estar ocupado por primera vez.
                     table[index] = new Entry<>(key, value);
                     occupiedSlots++;
                 }
@@ -201,7 +167,7 @@ public class HashTable<K, V> implements HashTableInterface<K, V>, Drawable {
             int index = normalize(collisionStrategy.probe(baseIndex, attempt, capacity));
             Entry<K, V> slot = table[index];
             if (slot == null) {
-                return null; // slot nunca ocupado: la clave no está en la tabla
+                return null;
             }
             if (slot != TOMBSTONE && slot.getKey().equals(key)) {
                 table[index] = TOMBSTONE;
@@ -333,13 +299,6 @@ public class HashTable<K, V> implements HashTableInterface<K, V>, Drawable {
         };
     }
 
-    /**
-     * Redimensiona la tabla (duplicando su capacidad) si, al insertar un
-     * elemento más, se superaría el factor de carga configurado. Para
-     * direccionamiento abierto también considera los tombstones
-     * ({@code occupiedSlots}), ya que degradan el sondeo igual que las
-     * entradas reales.
-     */
     private void ensureCapacityForInsert() {
         int projectedOccupancy = collisionStrategy.usesChaining() ? (size + 1) : (occupiedSlots + 1);
         double projectedLoadFactor = (double) projectedOccupancy / capacity;
@@ -348,12 +307,6 @@ public class HashTable<K, V> implements HashTableInterface<K, V>, Drawable {
         }
     }
 
-    /**
-     * Reconstruye la tabla con nueva capacidad, reinsertando (iterativamente,
-     * recalculando el hash para cada entrada) todas las entradas vivas de la
-     * tabla anterior. Este es el único lugar donde los tombstones de
-     * direccionamiento abierto se descartan definitivamente.
-     */
     @SuppressWarnings("unchecked")
     private void resize(int newCapacity) {
         Entry<K, V>[] oldTable = table;
@@ -380,8 +333,6 @@ public class HashTable<K, V> implements HashTableInterface<K, V>, Drawable {
         }
     }
 
-    /** Inserta durante un {@link #resize(int)}, sin volver a chequear el
-     *  factor de carga (la tabla ya fue dimensionada para todo el contenido). */
     private void reinsert(K key, V value) {
         if (collisionStrategy.usesChaining()) {
             putChaining(key, value);
@@ -394,12 +345,21 @@ public class HashTable<K, V> implements HashTableInterface<K, V>, Drawable {
         return Math.floorMod(index, capacity);
     }
 
-    /**
-     * @return la capacidad interna actual del arreglo (no confundir con
-     *         {@link #size()}, la cantidad de entradas almacenadas)
-     */
     public int capacity() {
         return capacity;
+    }
+
+    public Entry<K, V> slot(int index) {
+        Entry<K, V> e = table[index];
+        return e == TOMBSTONE ? null : e;
+    }
+
+    public boolean isDeleted(int index) {
+        return table[index] == TOMBSTONE;
+    }
+
+    public boolean usesChaining() {
+        return collisionStrategy.usesChaining();
     }
 
     @Override

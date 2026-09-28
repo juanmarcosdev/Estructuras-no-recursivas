@@ -8,13 +8,6 @@ import com.cyedbooks.estructuras.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-/**
- * Lista simplemente enlazada, con referencias a cabeza y cola para que
- * {@code addLast} sea O(1). Todas las operaciones se implementan con
- * recorridos iterativos.
- *
- * @param <T> tipo de los elementos almacenados
- */
 public class SinglyLinkedList<T> implements LinkedListInterface<T>, Drawable {
 
     private Node<T> head;
@@ -206,8 +199,6 @@ public class SinglyLinkedList<T> implements LinkedListInterface<T>, Drawable {
 
     @Override
     public void clear() {
-        // Recorrido iterativo desenlazando cada nodo, ayudando al GC y
-        // evitando cualquier referencia colgante.
         Node<T> current = head;
         while (current != null) {
             Node<T> next = current.getNext();

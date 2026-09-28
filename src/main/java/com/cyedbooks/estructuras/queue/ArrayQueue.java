@@ -8,15 +8,6 @@ import com.cyedbooks.estructuras.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-/**
- * Cola respaldada por un arreglo usado como <b>buffer circular</b>: se
- * mantienen los índices {@code front} y {@code rear} y ambos "envuelven"
- * (wrap-around) al llegar al final del arreglo mediante aritmética modular,
- * evitando el desplazamiento O(n) de elementos que tendría un arreglo lineal
- * ingenuo en cada {@code dequeue}.
- *
- * @param <T> tipo de los elementos almacenados
- */
 public class ArrayQueue<T> implements QueueInterface<T>, Drawable {
 
     private Object[] elements;
@@ -39,7 +30,7 @@ public class ArrayQueue<T> implements QueueInterface<T>, Drawable {
         if (ArrayDynamics.needsGrowth(size, elements.length)) {
             grow();
         }
-        int insertIndex = (front + size) % elements.length;
+        int insertIndex = (front + size) % elements.length; //da la vuelta al arreglo
         elements[insertIndex] = element;
         size++;
     }

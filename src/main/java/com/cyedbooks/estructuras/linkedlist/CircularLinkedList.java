@@ -8,21 +8,9 @@ import com.cyedbooks.estructuras.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-/**
- * Lista circular simplemente enlazada: se mantiene solo la referencia a la
- * cola ({@code tail}), y {@code tail.getNext()} siempre apunta a la cabeza
- * (o a {@code null} lógico cuando la lista está vacía). Esto hace que tanto
- * {@code addFirst} como {@code addLast} sean O(1).
- * <p>
- * La iteración se detiene tras exactamente {@code size} pasos —nunca
- * comparando contra {@code null}— para no ciclar infinitamente sobre la
- * estructura circular.
- *
- * @param <T> tipo de los elementos almacenados
- */
 public class CircularLinkedList<T> implements LinkedListInterface<T>, Drawable {
 
-    private Node<T> tail; // tail.next == head
+    private Node<T> tail; //tail.next es la cabeza
     private int size;
 
     @Override
@@ -40,9 +28,8 @@ public class CircularLinkedList<T> implements LinkedListInterface<T>, Drawable {
 
     @Override
     public void addLast(T element) {
+        //se mete al inicio y se corre el tail, queda de ultimo
         addFirst(element);
-        // La nueva cabeza pasa a ser la cola, para que el elemento recién
-        // insertado quede al final del orden lógico.
         tail = tail.getNext();
     }
 
@@ -217,8 +204,6 @@ public class CircularLinkedList<T> implements LinkedListInterface<T>, Drawable {
     @Override
     public void clear() {
         if (tail != null) {
-            // Rompe el ciclo explícitamente para facilitar la recolección
-            // de basura y evitar que un iterador externo quede colgado.
             Node<T> current = tail.getNext();
             for (int i = 0; i < size; i++) {
                 Node<T> next = current.getNext();

@@ -51,10 +51,10 @@ class ArrayQueueTest {
         q.enqueue(1);
         q.enqueue(2);
         q.enqueue(3);
-        assertEquals(1, q.dequeue()); // front avanza, deja un hueco al inicio
+        assertEquals(1, q.dequeue());
         assertEquals(2, q.dequeue());
         q.enqueue(4);
-        q.enqueue(5); // estos deben "envolver" al inicio del arreglo interno
+        q.enqueue(5);
         assertEquals(3, q.dequeue());
         assertEquals(4, q.dequeue());
         assertEquals(5, q.dequeue());
@@ -84,9 +84,9 @@ class ArrayQueueTest {
         q.enqueue(4);
         q.dequeue();
         q.dequeue();
-        q.enqueue(5); // wrap
-        q.enqueue(6); // wrap, ahora lleno de nuevo (4 elementos: 3,4,5,6)
-        q.enqueue(7); // fuerza crecimiento estando envuelto
+        q.enqueue(5);
+        q.enqueue(6);
+        q.enqueue(7);
         assertEquals(List_of(3, 4, 5, 6, 7), drainAll(q));
     }
 

@@ -57,7 +57,6 @@ class CircularLinkedListTest {
         list.addFirst(42);
         assertEquals(42, list.removeFirst());
         assertTrue(list.isEmpty());
-        // Reutilización tras vaciar: la circularidad debe reconstruirse bien.
         list.addLast(1);
         list.addLast(2);
         assertEquals(List.of(1, 2), toList());
@@ -94,7 +93,7 @@ class CircularLinkedListTest {
         list.addLast(1);
         list.addLast(2);
         list.addLast(3);
-        assertTrue(list.remove(3)); // el valor de la cola
+        assertTrue(list.remove(3));
         assertEquals(List.of(1, 2), toList());
         assertEquals(2, list.peekLast());
         list.addLast(9);

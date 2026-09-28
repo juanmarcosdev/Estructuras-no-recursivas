@@ -47,7 +47,7 @@ class HashTableTest {
         Integer previous = table.put("clave", 2);
         assertEquals(1, previous);
         assertEquals(2, table.get("clave"));
-        assertEquals(1, table.size()); // no debe duplicar la entrada
+        assertEquals(1, table.size());
     }
 
     @Test
@@ -69,7 +69,7 @@ class HashTableTest {
         assertEquals(1, table.remove("a"));
         assertFalse(table.containsKey("a"));
         assertEquals(1, table.size());
-        assertNull(table.remove("a")); // ya no existe
+        assertNull(table.remove("a"));
     }
 
     @Test
@@ -88,12 +88,10 @@ class HashTableTest {
     @Test
     @DisplayName("colisión explícita: dos claves distintas en el mismo bucket coexisten correctamente")
     void handlesExplicitCollision() {
-        // Con capacidad inicial 4 y DivisionHash, "A" y "E" (o cualquier par con
-        // el mismo hashCode mod 4) colisionan; forzamos una tabla pequeña.
         HashTable<Integer, String> smallTable = new HashTable<>(4);
         smallTable.put(1, "uno");
-        smallTable.put(5, "cinco"); // 1 % 4 == 5 % 4 == 1: misma posición base
-        smallTable.put(9, "nueve"); // también colisiona
+        smallTable.put(5, "cinco");
+        smallTable.put(9, "nueve");
         assertEquals("uno", smallTable.get(1));
         assertEquals("cinco", smallTable.get(5));
         assertEquals("nueve", smallTable.get(9));

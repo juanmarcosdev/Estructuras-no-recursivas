@@ -8,14 +8,6 @@ import com.cyedbooks.estructuras.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-/**
- * Cola respaldada por una lista enlazada de nodos simples, con referencias
- * a {@code head} (frente) y {@code tail} (final), lo que garantiza
- * {@code enqueue}/{@code dequeue} en O(1) estricto sin necesidad de
- * redimensionar nada.
- *
- * @param <T> tipo de los elementos almacenados
- */
 public class LinkedQueue<T> implements QueueInterface<T>, Drawable {
 
     private Node<T> head;

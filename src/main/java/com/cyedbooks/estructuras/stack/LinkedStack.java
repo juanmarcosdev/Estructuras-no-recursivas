@@ -8,13 +8,6 @@ import com.cyedbooks.estructuras.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-/**
- * Pila respaldada por una lista enlazada de nodos simples: el tope es
- * siempre la cabeza, por lo que {@code push}/{@code pop}/{@code peek} son
- * O(1) estricto (sin amortización, a diferencia de {@code ArrayStack}).
- *
- * @param <T> tipo de los elementos almacenados
- */
 public class LinkedStack<T> implements StackInterface<T>, Drawable {
 
     private Node<T> top;

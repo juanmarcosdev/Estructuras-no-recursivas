@@ -22,8 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Funciones de hash y estrategias de colisión")
 class CollisionStrategyTest {
 
-    // ---- HashFunction: rango de salida ----
-
     @Test
     void divisionHashAlwaysInRange() {
         assertHashInRangeForManyKeys(new DivisionHash<>(), 17);
@@ -61,8 +59,6 @@ class CollisionStrategyTest {
         }
     }
 
-    // ---- CollisionStrategy: forma de la secuencia de sondeo ----
-
     @Test
     void linearProbingAdvancesByOne() {
         CollisionStrategy strategy = new LinearProbing();
@@ -78,7 +74,7 @@ class CollisionStrategyTest {
     void linearProbingWrapsAroundCapacity() {
         CollisionStrategy strategy = new LinearProbing();
         int capacity = 5;
-        assertEquals(0, strategy.probe(3, 2, capacity)); // (3+2) % 5 == 0
+        assertEquals(0, strategy.probe(3, 2, capacity));
     }
 
     @Test
@@ -114,8 +110,6 @@ class CollisionStrategyTest {
         assertTrue(strategy.usesChaining());
         assertEquals(3, strategy.probe(3, 0, 10));
     }
-
-    // ---- Integración: la HashTable funciona igual (semánticamente) con cualquier combinación ----
 
     static Stream<CollisionStrategy> allStrategies() {
         return Stream.of(new ChainingStrategy(), new LinearProbing(), new QuadraticProbing());

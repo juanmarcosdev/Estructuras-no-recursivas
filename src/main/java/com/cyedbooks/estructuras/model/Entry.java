@@ -2,22 +2,8 @@ package com.cyedbooks.estructuras.model;
 
 import java.util.Objects;
 
-/**
- * Par clave-valor almacenado por {@code HashTable}. Incluye un enlace
- * {@code next} propio para poder actuar, sin envolturas adicionales, como
- * nodo de una lista de colisiones cuando la tabla usa la estrategia de
- * encadenamiento separado ({@code ChainingStrategy}); las estrategias de
- * direccionamiento abierto simplemente ignoran ese enlace.
- *
- * @param <K> tipo de la clave
- * @param <V> tipo del valor
- */
 public class Entry<K, V> {
 
-    /** Marca especial usada por las estrategias de direccionamiento abierto
-     *  para representar un slot que tuvo una entrada y fue eliminada
-     *  ("tombstone"), de forma que las secuencias de sondeo sigan siendo
-     *  válidas tras una remoción. */
     public static final Object DELETED_MARKER = new Object();
 
     private final K key;

@@ -107,7 +107,6 @@ class DoublyLinkedListTest {
         for (int i = 0; i < 21; i++) {
             list.addLast(i);
         }
-        // índice cercano a la cabeza y cercano a la cola deben ambos ser correctos
         assertEquals(2, list.get(2));
         assertEquals(18, list.get(18));
         assertEquals(10, list.get(10));
